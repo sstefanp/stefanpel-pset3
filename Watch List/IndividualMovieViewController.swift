@@ -28,6 +28,7 @@ class IndividualMovieViewController: UIViewController {
     @IBOutlet weak var yearMovie: UILabel!
     @IBOutlet weak var actorsMovie: UILabel!
     @IBOutlet weak var directorMovie: UILabel!
+    @IBOutlet weak var imdbMovie: UILabel!
     
     @IBOutlet weak var plotMovie: UITextView!
     
@@ -68,10 +69,15 @@ class IndividualMovieViewController: UIViewController {
                         self.directorMovie.text = json["Director"] as! String?
                         self.plotMovie.text = json["Plot"] as! String?
                         self.actorsMovie.text = json["Genre"] as! String?
+                        self.imdbMovie.text = json["imdbRating"] as! String?
                         self.movieImage = json["Poster"] as! String?
+                        
                         
                         // to retrieve poster
                         if let tempUrl = json["Poster"] as? String {
+                            if tempUrl == "N/A" {
+                                self.posterMovie.image = #imageLiteral(resourceName: "no-image-icon")
+                            }
                             let url = NSURL(string: tempUrl.replacingOccurrences(of: "http:", with: "https:"))
                             if let poster = NSData(contentsOf: url as! URL) {
                                 self.posterMovie.image = UIImage(data: poster as Data)

@@ -21,11 +21,6 @@ import Foundation
     var movieYears = [String]()
     var movieImages = [String]()
     
-    // keeping track current title and year
-    //var currentIndex: Int?
-    var titleToPass: String?
-    var yearToPass: String?
-    
     @IBAction func addButtonItemPressed(_ sender: UIBarButtonItem) {
         let viewController = SearchTableViewController(completion: self.favorite)
         let navigationController = UINavigationController(rootViewController: viewController)
@@ -51,6 +46,7 @@ import Foundation
     func updateWatchlist() {
         self.watchList.set(self.movieTitles, forKey: "Title")
         self.watchList.set(self.movieYears, forKey: "Year")
+        self.watchList.set(self.movieImages, forKey: "Poster")
     }
     
     override func viewDidLoad() {
@@ -104,7 +100,6 @@ import Foundation
         }
     }
     
-    
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -113,13 +108,12 @@ import Foundation
         if editingStyle == UITableViewCellEditingStyle.delete {
             movieTitles.remove(at: indexpath.row)
             movieYears.remove(at: indexpath.row)
+            movieImages.remove(at: indexpath.row)
             tableView.deleteRows(at: [indexpath], with: .fade)
         }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        print ("You selected #\(indexPath.row)!")
         
         let currentIndex = tableView.indexPathForSelectedRow
         let currentCell = tableView.cellForRow(at: currentIndex!) as! WatchListCell!

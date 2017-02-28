@@ -131,7 +131,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Dvx-vg-rWb">
-                                <rect key="frame" x="16" y="427" width="343" height="220"/>
+                                <rect key="frame" x="16" y="397" width="343" height="250"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
@@ -175,6 +175,7 @@
                     <connections>
                         <outlet property="actorsMovie" destination="sc3-CY-rX4" id="J3D-gg-xuI"/>
                         <outlet property="directorMovie" destination="yKr-7t-Pzy" id="5wS-u4-9lT"/>
+                        <outlet property="imdbMovie" destination="q4N-pK-1q6" id="YxY-Qi-mX7"/>
                         <outlet property="plotMovie" destination="Dvx-vg-rWb" id="vBI-Ae-CC3"/>
                         <outlet property="posterMovie" destination="hof-cI-aHn" id="t2P-ce-BTD"/>
                         <outlet property="titleMovie" destination="ePE-1u-WIK" id="eFp-71-mxb"/>

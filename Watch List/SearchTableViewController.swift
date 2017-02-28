@@ -39,7 +39,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate, UIS
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchBar.searchBarStyle = .minimal
+        searchBar.searchBarStyle = .prominent
         // searchBar.delegate = self
         self.navigationItem.titleView = searchBar
         
