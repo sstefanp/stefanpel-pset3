@@ -48,6 +48,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate, UIS
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonItemPressed))
         self.navigationItem.leftBarButtonItem = cancelItem
         
+        
         let searchItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchButtonItemPressed))
         self.navigationItem.rightBarButtonItem = searchItem
         
@@ -62,7 +63,12 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate, UIS
         //
     }
     
-    
+    /*
+    func searchBar(_ searchBar: searchBar, textDidChange searchText: String) {
+        let searching = searchText.replacingOccurrences(of: " ", with: "+")
+        movieSearch(movieTitle: searching)
+    }
+    */
     // Search started
     func searchButtonItemPressed(_sender: UIBarButtonItem) {
         let searching = searchBar.text?.replacingOccurrences(of: " ", with: "+")

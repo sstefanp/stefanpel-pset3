@@ -17,6 +17,8 @@ class IndividualMovieViewController: UIViewController {
     var movieDirector: String!
     var movieImage: String!
     
+    var urlString: String!
+    
     var currentIndex: Int?
     
     
@@ -33,13 +35,23 @@ class IndividualMovieViewController: UIViewController {
         super.viewDidLoad()
         
         let newTitle = movieTitle.replacingOccurrences(of: " ", with: "+")
-        let year = movieYear
+        let year = movieYear //.replacingOccurrences(of: "-", with: "%E2%80%93")
+        if (year?.characters.contains("-"))! {
+            urlString = "https://www.omdbapi.com/?t="+newTitle+"&y=&plot=full&r=json"
+        }
+        else {
+            urlString = "https://www.omdbapi.com/?t="+newTitle+"&y="+year!+"&plot=full&r=json"
+        }
+        print (urlString)
         
-        let urlString = "https://www.omdbapi.com/?t="+newTitle+"&y="+year!+"&plot=full&r=json"
         let request = URLRequest(url: URL(string: urlString)!)
         URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
             // Guards execute when the condition is NOT met.
             guard let data = data, error == nil else {
+                print ("error")
+                self.plotMovie.text = ""
+                self.actorsMovie.text = ""
+                self.movieImage = ""
                 return
             }
             // Get access to the main thread and the interface elements:
@@ -60,7 +72,6 @@ class IndividualMovieViewController: UIViewController {
                         
                         // to retrieve poster
                         if let tempUrl = json["Poster"] as? String {
-                            // Urls with http do not return an image, should have https.
                             let url = NSURL(string: tempUrl.replacingOccurrences(of: "http:", with: "https:"))
                             if let poster = NSData(contentsOf: url as! URL) {
                                 self.posterMovie.image = UIImage(data: poster as Data)
@@ -76,8 +87,6 @@ class IndividualMovieViewController: UIViewController {
         titleMovie.text = movieTitle
         yearMovie.text = movieYear
     }
-    
-    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -85,11 +94,10 @@ class IndividualMovieViewController: UIViewController {
     }
     
     @IBAction func backButton(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "IMVC") as! IndividualMovieViewController
+        //let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        //let viewController = storyboard.instantiateViewController(withIdentifier: "IMVC") as! IndividualMovieViewController
         
         self.dismiss(animated: true, completion: nil)
-        //self.dism(viewController, animated: true , completion: nil)
     }
     
     

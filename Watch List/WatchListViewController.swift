@@ -19,14 +19,10 @@ import Foundation
     // creating arrays for storing movie info
     var movieTitles = [String]()
     var movieYears = [String]()
-    var moviePlots = [String]()
     var movieImages = [String]()
-    var movieDirector = [String]()
-    var movieActors = [String]()
-    
     
     // keeping track current title and year
-    var currentIndex: Int?
+    //var currentIndex: Int?
     var titleToPass: String?
     var yearToPass: String?
     
@@ -89,23 +85,23 @@ import Foundation
         watchCell.movieDescription.text = movieYears[indexPath.row]
         
         if movieImages[indexPath.row] == "N/A" {
-            watchCell.moviePoster.image = #imageLiteral(resourceName: " Inception")
+            watchCell.moviePoster.image = #imageLiteral(resourceName: "no-image-icon")
         }
         else {
             watchCell.moviePoster.image = loadImage(poster: movieImages[indexPath.row])
         }
-        currentIndex = indexPath.row
         
         return watchCell
     }
     
     func loadImage(poster: String) -> UIImage {
-        var adress = poster.replacingOccurrences(of: "http",with: "https")
-        adress = poster.replacingOccurrences(of: "httpss",with: "https")
-        let url = URL(string: (adress))
-        let data = try! Data(contentsOf: url!)
-        let image = UIImage(data: data)
-        return image!
+        
+        if let tempUrl = poster as? String {
+            let url = NSURL(string: tempUrl.replacingOccurrences(of: "http:", with: "https:"))
+            let data = NSData(contentsOf: url as! URL)
+            let image = UIImage(data: data as! Data)
+            return image!
+        }
     }
     
     
