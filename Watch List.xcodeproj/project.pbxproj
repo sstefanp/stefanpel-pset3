@@ -9,25 +9,27 @@
 /* Begin PBXBuildFile section */
 		F805FAF21E5F160F00E86221 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805FAF11E5F160F00E86221 /* AppDelegate.swift */; };
 		F805FAF41E5F160F00E86221 /* WatchListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805FAF31E5F160F00E86221 /* WatchListViewController.swift */; };
-		F805FAF71E5F160F00E86221 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F805FAF51E5F160F00E86221 /* Main.storyboard */; };
 		F805FAF91E5F160F00E86221 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F805FAF81E5F160F00E86221 /* Assets.xcassets */; };
 		F805FAFC1E5F160F00E86221 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F805FAFA1E5F160F00E86221 /* LaunchScreen.storyboard */; };
 		F805FB041E5F1B9200E86221 /* WatchListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805FB031E5F1B9200E86221 /* WatchListCell.swift */; };
 		F80D42BD1E606CAC002535C5 /* IndividualMovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80D42BC1E606CAC002535C5 /* IndividualMovieViewController.swift */; };
 		F80D42BF1E606F70002535C5 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80D42BE1E606F70002535C5 /* SearchTableViewController.swift */; };
+		F82AC1ED1E649E88002FB6E4 /* SearchViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82AC1EC1E649E88002FB6E4 /* SearchViewCell.swift */; };
+		F82AC22E1E65EDB4002FB6E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F82AC22D1E65EDB4002FB6E4 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F805FAEE1E5F160F00E86221 /* Watch List.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Watch List.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F805FAF11E5F160F00E86221 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F805FAF31E5F160F00E86221 /* WatchListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchListViewController.swift; sourceTree = "<group>"; };
-		F805FAF61E5F160F00E86221 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F805FAF81E5F160F00E86221 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F805FAFB1E5F160F00E86221 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F805FAFD1E5F160F00E86221 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F805FB031E5F1B9200E86221 /* WatchListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchListCell.swift; sourceTree = "<group>"; };
 		F80D42BC1E606CAC002535C5 /* IndividualMovieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndividualMovieViewController.swift; sourceTree = "<group>"; };
 		F80D42BE1E606F70002535C5 /* SearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
+		F82AC1EC1E649E88002FB6E4 /* SearchViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewCell.swift; sourceTree = "<group>"; };
+		F82AC22D1E65EDB4002FB6E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,15 +62,16 @@
 		F805FAF01E5F160F00E86221 /* Watch List */ = {
 			isa = PBXGroup;
 			children = (
+				F82AC22D1E65EDB4002FB6E4 /* Main.storyboard */,
 				F80D42BC1E606CAC002535C5 /* IndividualMovieViewController.swift */,
 				F805FAF11E5F160F00E86221 /* AppDelegate.swift */,
 				F805FAF31E5F160F00E86221 /* WatchListViewController.swift */,
 				F805FB031E5F1B9200E86221 /* WatchListCell.swift */,
-				F805FAF51E5F160F00E86221 /* Main.storyboard */,
+				F80D42BE1E606F70002535C5 /* SearchTableViewController.swift */,
+				F82AC1EC1E649E88002FB6E4 /* SearchViewCell.swift */,
 				F805FAF81E5F160F00E86221 /* Assets.xcassets */,
 				F805FAFA1E5F160F00E86221 /* LaunchScreen.storyboard */,
 				F805FAFD1E5F160F00E86221 /* Info.plist */,
-				F80D42BE1E606F70002535C5 /* SearchTableViewController.swift */,
 			);
 			path = "Watch List";
 			sourceTree = "<group>";
@@ -133,9 +136,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F82AC22E1E65EDB4002FB6E4 /* Main.storyboard in Resources */,
 				F805FAFC1E5F160F00E86221 /* LaunchScreen.storyboard in Resources */,
 				F805FAF91E5F160F00E86221 /* Assets.xcassets in Resources */,
-				F805FAF71E5F160F00E86221 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,6 +149,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F82AC1ED1E649E88002FB6E4 /* SearchViewCell.swift in Sources */,
 				F805FB041E5F1B9200E86221 /* WatchListCell.swift in Sources */,
 				F805FAF41E5F160F00E86221 /* WatchListViewController.swift in Sources */,
 				F80D42BF1E606F70002535C5 /* SearchTableViewController.swift in Sources */,
@@ -157,14 +161,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		F805FAF51E5F160F00E86221 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F805FAF61E5F160F00E86221 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		F805FAFA1E5F160F00E86221 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

@@ -11,12 +11,12 @@ import Foundation
 
 @objc class WatchListViewController: UITableViewController {
     
+    @IBOutlet var watchListTable: UITableView!
     
     // create watchlist for user
-    let watchlist = UserDefaults.standard
+    let watchList = UserDefaults.standard
     
-    
-    //creating arrays for storing movie info
+    // creating arrays for storing movie info
     var movieTitles = [String]()
     var movieYears = [String]()
     var moviePlots = [String]()
@@ -25,44 +25,48 @@ import Foundation
     var movieActors = [String]()
     
     
+    // keeping track current title and year
+    var currentIndex: Int?
+    var titleToPass: String?
+    var yearToPass: String?
+    
     @IBAction func addButtonItemPressed(_ sender: UIBarButtonItem) {
-        let viewController = SearchTableViewController()
+        let viewController = SearchTableViewController(completion: self.favorite)
         let navigationController = UINavigationController(rootViewController: viewController)
         self.present(navigationController, animated: true, completion: nil)
     }
     
-    let titles = ["The Godfather", "Shooter", "Inception", "Chaos"]
-    let descriptions = [
-        "The Godfather": "Maffia boss has hard decisions to make",
-        "Shooter": "Man gets framed for murder of the president, has to prove he is innocent",
-        "Inception": "Group of men perform actions in some people's dreams, have to escape",
-        "Chaos": "Man explains chaos theory by solving a criminal case"
-    ]
+    // Add movie to dictionary
+    func addMovie(movieDictionary: NSDictionary) {
+        self.movieTitles.append((movieDictionary["Title"] as? String)!)
+        self.movieYears.append((movieDictionary["Year"] as? String)!)
+        //self.moviePlots.append((movieDictionary["Plot"] as? String)!)
+        self.movieImages.append((movieDictionary["Poster"] as? String)!)
+    }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        
-        let url = URL(string: "https://www.omdbapi.com/?t=Shooter&y=&plot=short&r=json")
-        
-        let task = URLSession.shared.dataTask(with: url!) { data, response, error in
-            guard error == nil else {
-                print(error!)
-                return
-            }
-            guard let data = data else {
-                print("Data is empty")
-                return
-            }
-            
-            let json = try! JSONSerialization.jsonObject(with: data, options: [])
-            print(json)
-        }
-        task.resume()
+    func favorite(movie: [String : Any]) {
+        // Do something.
+        self.addMovie(movieDictionary: movie as NSDictionary)
+        self.tableView.reloadData()
+        self.navigationController?.dismiss(animated: true, completion: nil)
     }
 
+    // Update watchlist
+    func updateWatchlist() {
+        self.watchList.set(self.movieTitles, forKey: "Title")
+        self.watchList.set(self.movieYears, forKey: "Year")
+    }
     
+    override func viewDidLoad() {
+        
+        super.viewDidLoad()
+        // set watchlist
+        movieTitles = (self.watchList.array(forKey: "Title") as? [String]) ?? []
+        movieImages = (self.watchList.array(forKey: "Poster") as? Array<String>) ?? []
+        movieYears = (self.watchList.array(forKey: "Year") as? Array<String>) ?? []
+    }
+ 
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -74,27 +78,36 @@ import Foundation
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return titles.count
+        return movieTitles.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let watchCell = tableView.dequeueReusableCell(withIdentifier: "watchCell", for: indexPath) as! WatchListCell
+        let watchCell = tableView.dequeueReusableCell(withIdentifier: "watchListCell", for: indexPath) as! WatchListCell
         
-        watchCell.movieTitle.text = titles[indexPath.row]
+        watchCell.movieTitle.text = movieTitles[indexPath.row]
+        watchCell.movieDescription.text = movieYears[indexPath.row]
         
-        if let storyline = descriptions[titles[indexPath.row]] {
-            watchCell.movieDescription.text = storyline
-        } else {
-            watchCell.movieDescription.text = "No plot found"
+        if movieImages[indexPath.row] == "N/A" {
+            watchCell.moviePoster.image = #imageLiteral(resourceName: " Inception")
         }
-        
-        if let image = UIImage(named: titles[indexPath.row]) {
-            watchCell.moviePoster.image = image
+        else {
+            watchCell.moviePoster.image = loadImage(poster: movieImages[indexPath.row])
         }
+        currentIndex = indexPath.row
         
         return watchCell
     }
+    
+    func loadImage(poster: String) -> UIImage {
+        var adress = poster.replacingOccurrences(of: "http",with: "https")
+        adress = poster.replacingOccurrences(of: "httpss",with: "https")
+        let url = URL(string: (adress))
+        let data = try! Data(contentsOf: url!)
+        let image = UIImage(data: data)
+        return image!
+    }
+    
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
@@ -102,18 +115,25 @@ import Foundation
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexpath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete {
-            // remove from titles
+            movieTitles.remove(at: indexpath.row)
+            movieYears.remove(at: indexpath.row)
+            tableView.deleteRows(at: [indexpath], with: .fade)
         }
     }
     
-    // prepare for seque -> title = movieTitle, image == Movie Image
-    
-    //override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-      //  if let individualMovieVC = segue.destination as? IndividualMovieViewController {
-            //individualMovieVC.titleMovie = "Test"
-            //individualMovieVC.plotMovie = "Test description, this is a long piece of text......"
-        //}
-    // }
-     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        print ("You selected #\(indexPath.row)!")
+        
+        let currentIndex = tableView.indexPathForSelectedRow
+        let currentCell = tableView.cellForRow(at: currentIndex!) as! WatchListCell!
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "IMVC") as! IndividualMovieViewController
+        
+        viewController.movieTitle = (currentCell?.movieTitle.text)! as String
+        viewController.movieYear = (currentCell?.movieDescription.text)! as String
+        
+        self.present(viewController, animated: true , completion: nil)
+    }
 }
 
