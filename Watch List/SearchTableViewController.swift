@@ -63,6 +63,9 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate, UIS
         //
     }
     
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    }
+    
     /*
     func searchBar(_ searchBar: searchBar, textDidChange searchText: String) {
         let searching = searchText.replacingOccurrences(of: " ", with: "+")
