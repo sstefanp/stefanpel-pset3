@@ -10,71 +10,106 @@ import UIKit
 
 class IndividualMovieViewController: UIViewController {
     
+    // Variables from WatchListViewController
     var movieTitle: String!
     var movieYear: String!
     
+    // Variables to store other information
     var moviePlot: String!
     var movieDirector: String!
     var movieImage: String!
-    
     var urlString: String!
     
-    var currentIndex: Int?
-    
-    
-    // outlets
+    // Outlets
     @IBOutlet weak var posterMovie: UIImageView!
     @IBOutlet weak var titleMovie: UILabel!
     @IBOutlet weak var yearMovie: UILabel!
-    @IBOutlet weak var actorsMovie: UILabel!
+    @IBOutlet weak var genreMovie: UILabel!
     @IBOutlet weak var directorMovie: UILabel!
     @IBOutlet weak var imdbMovie: UILabel!
-    
     @IBOutlet weak var plotMovie: UITextView!
+    
+    
+    // Views
+    @IBOutlet weak var upperView: UIView!
+    @IBOutlet weak var lowerView: UIView!
+    
+    override func viewWillLayoutSubviews() {
+        // App is in landscape view
+        if self.view.bounds.width > self.view.bounds.height {
+            // Lowerview
+            self.lowerView.frame.size.width = 0.5 * self.view.bounds.width
+            self.lowerView.frame.origin.x = 0.5 * self.view.bounds.width - 20
+            self.lowerView.frame.origin.y = 12
+            self.lowerView.frame.size.height = self.view.bounds.height - 8
+            // Upperview
+            self.upperView.frame.origin.x = 2
+            self.upperView.frame.origin.y = 12
+            self.upperView.frame.size.width = 0.5 * self.view.bounds.width
+            self.upperView.frame.size.height = self.view.bounds.height - 20
+        }
+            // App is in portret view
+        else {
+            // Lower view
+            self.lowerView.frame.size.height = 0.5 * self.view.bounds.height
+            self.lowerView.frame.origin.x = 0
+            self.lowerView.frame.origin.y = 0.5 * self.view.bounds.height
+            self.lowerView.frame.size.width = self.view.bounds.width
+            // Upperview
+            self.upperView.frame.origin.x = 0
+            self.upperView.frame.origin.y = 20
+            self.upperView.frame.size.height = 0.5 * self.view.bounds.height - 20
+            self.upperView.frame.size.width = self.view.bounds.width
+        }
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Adjust for titles with multiple words
+        // Adjust for years with (-) in them
         let newTitle = movieTitle.replacingOccurrences(of: " ", with: "+")
-        let year = movieYear //.replacingOccurrences(of: "-", with: "%E2%80%93")
+        let year = movieYear
         if (year?.characters.contains("-"))! {
             urlString = "https://www.omdbapi.com/?t="+newTitle+"&y=&plot=full&r=json"
         }
         else {
             urlString = "https://www.omdbapi.com/?t="+newTitle+"&y="+year!+"&plot=full&r=json"
         }
-        print (urlString)
         
+        // Get data from OMDB
         let request = URLRequest(url: URL(string: urlString)!)
         URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
-            // Guards execute when the condition is NOT met.
+            // Guards data, account for errors
             guard let data = data, error == nil else {
                 print ("error")
                 self.plotMovie.text = ""
-                self.actorsMovie.text = ""
+                self.genreMovie.text = ""
                 self.movieImage = ""
                 return
             }
-            // Get access to the main thread and the interface elements:
+            //
             DispatchQueue.main.async {
                 do {
                     // Convert data to json.
-                    let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                    let info = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
                     
                     // Check if the response is true.
-                    if json["Error"] != nil {
+                    if info["Error"] != nil {
                         return
                     }
                     else {
-                        self.directorMovie.text = json["Director"] as! String?
-                        self.plotMovie.text = json["Plot"] as! String?
-                        self.actorsMovie.text = json["Genre"] as! String?
-                        self.imdbMovie.text = json["imdbRating"] as! String?
-                        self.movieImage = json["Poster"] as! String?
+                        // Fill in labels
+                        self.directorMovie.text = info["Director"] as! String?
+                        self.plotMovie.text = info["Plot"] as! String?
+                        self.genreMovie.text = info["Genre"] as! String?
+                        self.imdbMovie.text = info["imdbRating"] as! String?
+                        self.movieImage = info["Poster"] as! String?
                         
                         
-                        // to retrieve poster
-                        if let tempUrl = json["Poster"] as? String {
+                        // Getting poster from URL
+                        if let tempUrl = info["Poster"] as? String {
                             if tempUrl == "N/A" {
                                 self.posterMovie.image = #imageLiteral(resourceName: "no-image-icon")
                             }
@@ -90,6 +125,7 @@ class IndividualMovieViewController: UIViewController {
             }
         }).resume()
         
+        // Filling in title and year labels
         titleMovie.text = movieTitle
         yearMovie.text = movieYear
     }
@@ -99,23 +135,8 @@ class IndividualMovieViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    // Backbutton to dismiss view
     @IBAction func backButton(_ sender: Any) {
-        //let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        //let viewController = storyboard.instantiateViewController(withIdentifier: "IMVC") as! IndividualMovieViewController
-        
         self.dismiss(animated: true, completion: nil)
     }
-    
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

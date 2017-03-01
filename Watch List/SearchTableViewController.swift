@@ -10,22 +10,12 @@ import UIKit
 
 class SearchTableViewController: UITableViewController, UISearchBarDelegate, UISearchDisplayDelegate {
 
-    // creating arrays for storing movie info
-    var movieTitles = [String]()
-    var movieYears = [String]()
-    var moviePlots = [String]()
-    var movieImages = [String]()
-    var movieDirector = [String]()
-    var movieActors = [String]()
-    
+    // Dictionary for search results
     var searchResults: [Dictionary<String, AnyObject>] = []
-    
-    var searchID = ""
-    
     let searchBar = UISearchBar()
     
+    // To WatchListViewController
     let completion: (([String : Any]) -> Void)
-    
     init(completion: @escaping (([String : Any]) -> Void)) {
         self.completion = completion
         
@@ -35,12 +25,13 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate, UIS
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    // Initialize searchbar
     override func viewDidLoad() {
         super.viewDidLoad()
         
         searchBar.searchBarStyle = .prominent
-        // searchBar.delegate = self
+        searchBar.placeholder = "Search for movies"
         self.navigationItem.titleView = searchBar
         
         self.tableView.register(SearchViewCell.self, forCellReuseIdentifier: "Search View Cell")
@@ -48,30 +39,11 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate, UIS
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonItemPressed))
         self.navigationItem.leftBarButtonItem = cancelItem
         
-        
         let searchItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchButtonItemPressed))
         self.navigationItem.rightBarButtonItem = searchItem
         
     }
     
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        //
-    }
-    
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        //
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-    }
-    
-    /*
-    func searchBar(_ searchBar: searchBar, textDidChange searchText: String) {
-        let searching = searchText.replacingOccurrences(of: " ", with: "+")
-        movieSearch(movieTitle: searching)
-    }
-    */
     // Search started
     func searchButtonItemPressed(_sender: UIBarButtonItem) {
         let searching = searchBar.text?.replacingOccurrences(of: " ", with: "+")
@@ -84,7 +56,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate, UIS
         print ("clicked")
     }
 
-    // Function to retrieve data
+    // Get information from OMDB
     func movieSearch(movieTitle: String) {
         let urlString = "https://www.omdbapi.com/?s="+movieTitle+"&y=&plot=short"
         let request = URLRequest(url: URL(string: urlString)!)
@@ -100,15 +72,15 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate, UIS
             DispatchQueue.main.async {
                 do {
                     // Convert data to json.
-                    let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                    let info = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
                     
                     // Check if the response is true.
-                    if json["Error"] != nil {
+                    if info["Error"] != nil {
                         self.searchResults = []
                     }
                     else {
-                        // The list with results.
-                        self.searchResults = json["Search"]! as! [Dictionary<String, AnyObject>]
+                        // Fill dictionary with results
+                        self.searchResults = info["Search"]! as! [Dictionary<String, AnyObject>]
                     }
                 } catch {
                     self.searchResults = []
@@ -123,19 +95,18 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate, UIS
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
-
+    
+    // Initialize table view
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
+    
+    // Return amount of rows
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return searchResults.count
     }
     
-    
+    // Fill cells
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Search View Cell", for: indexPath) as! SearchViewCell
         
@@ -147,49 +118,9 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate, UIS
         return cell
     }
     
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return false
-    }
-
-    
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    
+    // Selected row to add to watchlist
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cellInfo =  searchResults[indexPath.row]
         self.completion(cellInfo)
     }
-    
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
